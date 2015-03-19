@@ -1,0 +1,32 @@
+{
+  "name": "m2m-ota-javascript",
+  "version": "0.0.0",
+  "description": "M2M Over-The-Air library for Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "test-cov": "istanbul cover --hook-run-in-context _mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/numerex/m2m-ota-javascript.git"
+  },
+  "keywords": [
+    "M2M",
+    "OTA"
+  ],
+  "author": "Steve Emmons",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/numerex/m2m-ota-javascript/issues"
+  },
+  "homepage": "https://github.com/numerex/m2m-ota-javascript",
+  "dependencies": {
+    "binary": "^0.3.0",
+    "bufferput": "^0.1.2"
+  },
+  "devDependencies": {
+    "chai": "^2.1.2",
+    "mocha": "^2.2.1"
+  }
+}
