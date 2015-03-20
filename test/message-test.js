@@ -101,7 +101,7 @@ describe('Message',function() {
 
     it('should throw an error for an empty buffer',function(){
         var buffer = new Buffer('');
-        expect(function(){ new Message({buffer: buffer}) }).to.throw('abnormal termination - id expected');
+        expect(function(){ new Message({buffer: buffer}) }).to.throw('CRC found: undefined - CRC expected: 0');
     });
 
     it('should throw an error for an incomplete header',function(){
