@@ -45,6 +45,12 @@ describe('Message',function() {
         message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x83,2,0,3,0x61,0x62,0x63,0]));
     });
 
+    it('should create a valid message with a single float',function(){
+        var message = new Message({timestamp: 0});
+        message.pushFloat(0x90,10.5);
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x90,3,65,40,0,0,0]));
+    });
+
     it('should create a valid message with a single timestamp',function(){
         var message = new Message({timestamp: 0});
         message.pushTimestamp(0x84,0x1234567890);
@@ -75,22 +81,38 @@ describe('Message',function() {
         message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x88,6,0,3,0,1,0,2,0,3,0]));
     });
 
+    it('should create a valid message with a single empty float array',function(){
+        var message = new Message({timestamp: 0});
+        message.pushFloatArray(0x91,[]);
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x91,7,0,0,0]));
+    });
+
+    it('should create a valid message with a single simple float array',function(){
+        var message = new Message({timestamp: 0});
+        message.pushFloatArray(0x92,[1.0,2.0,3.0]);
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x92,7,0,3,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,0]));
+    });
+
     it('should create a valid message with one of each type of object',function(){
         var message = new Message({timestamp: 0});
         message.pushByte(0x80,0xAA);
         message.pushInt(0x81,0xAABB);
         message.pushString(0x83,'abc');
+        message.pushFloat(0x90,10.5);
         message.pushTimestamp(0x84,0x1234567890);
         message.pushByteArray(0x86,new Buffer([1,2,3]));
         message.pushIntArray(0x88,[1,2,3]);
+        message.pushFloatArray(0x92,[1.0,2.0,3.0]);
         message.toWire().should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,
             0x80,0,0xAA,
             0x81,1,0xAA,0xBB,
             0x83,2,0,3,0x61,0x62,0x63,
+            0x90,3,65,40,0,0,
             0x84,4,0,0,0,0x12,0x34,0x56,0x78,0x90,
             0x86,5,0,3,1,2,3,
             0x88,6,0,3,0,1,0,2,0,3,
-            123]));
+            0x92,7,0,3,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,
+            231]));
     });
 
     it('should thrown an error with an empty tuple',function(){
@@ -141,9 +163,14 @@ describe('Message',function() {
         expect(function(){ new Message({buffer: buffer}) }).to.throw('byte array length expected: 3 but found: 1');
     });
 
-    it('should throw an error if byte array length and content do not match',function(){
+    it('should throw an error if int array length and content do not match',function(){
         var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,3,0,0,75]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('int array length expected: 3 but found: 1');
+    });
+
+    it('should throw an error if float array length and content do not match',function(){
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,3,0,0,0,0,229]);
+        expect(function(){ new Message({buffer: buffer}) }).to.throw('float array length expected: 3 but found: 1');
     });
 
     it('should extract a message with one of each type of object from a buffer',function(){
@@ -151,10 +178,12 @@ describe('Message',function() {
             0x80,0,0xAA,
             0x81,1,0xAA,0xBB,
             0x83,2,0,3,0x61,0x62,0x63,
+            0x90,3,65,40,0,0,
             0x84,4,0,0,0,0x12,0x34,0x56,0x78,0x90,
             0x86,5,0,3,1,2,3,
             0x88,6,0,3,0,1,0,2,0,3,
-            135]);
+            0x92,7,0,3,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,
+            72]);
         var message = new Message({buffer: buffer});
         message.messageType.should.equal(1);
         message.majorVersion.should.equal(1);
@@ -166,9 +195,11 @@ describe('Message',function() {
             {id: 0x80,type: 0,value: 0xAA},
             {id: 0x81,type: 1,value: 0xAABB},
             {id: 0x83,type: 2,value: 'abc'},
+            {id: 0x90,type: 3,value: 10.5},
             {id: 0x84,type: 4,value: 0x1234567890},
             {id: 0x86,type: 5,value: new Buffer([1,2,3])},
-            {id: 0x88,type: 6,value: [1,2,3]}
+            {id: 0x88,type: 6,value: [1,2,3]},
+            {id: 0x92,type: 7,value: [1.0,2.0,3.0]}
         ]);
     });
 });

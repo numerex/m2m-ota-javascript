@@ -9,8 +9,8 @@ Currently contains support for the following object types:
 * byte
 * int
 * string
+* float (4-byte)
 * timestamp
 * byte array
 * int array
-
-NOTE: Support for float and float array is not available at this time due to issues with creating binary IEEE float data from Javascript.
+* float (4-byte) array
