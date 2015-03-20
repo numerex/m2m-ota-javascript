@@ -1,6 +1,6 @@
 {
   "name": "m2m-ota-javascript",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "M2M Over-The-Air library for Javascript",
   "main": "index.js",
   "scripts": {
@@ -30,6 +30,6 @@
     "chai": "^2.1.2",
     "coveralls": "^2.11.2",
     "mocha": "^2.2.1",
-    "mocha-lcov-reporter": "0.0.3"
+    "mocha-lcov-reporter": "0.0.2"
   }
 }
