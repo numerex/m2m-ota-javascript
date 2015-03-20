@@ -90,7 +90,7 @@ describe('Message',function() {
             0x84,4,0,0,0,0x12,0x34,0x56,0x78,0x90,
             0x86,5,0,3,1,2,3,
             0x88,6,0,3,0,1,0,2,0,3,
-            102]));
+            123]));
     });
 
     it('should thrown an error with an empty tuple',function(){
@@ -115,7 +115,7 @@ describe('Message',function() {
     });
 
     it('should throw an error for an unknown object type',function(){
-        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xFF,243]);
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xFF,255]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('unknown object type - 255');
     });
 
@@ -132,29 +132,29 @@ describe('Message',function() {
     });
 
     it('should throw an error if string length and content do not match',function(){
-        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,3,223]);
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,3,41]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('string length expected: 3 but found: 1');
     });
 
     it('should throw an error if byte array length and content do not match',function(){
-        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,3,201]);
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,3,66]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('byte array length expected: 3 but found: 1');
     });
 
     it('should throw an error if byte array length and content do not match',function(){
-        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,3,0,0,246]);
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,3,0,0,75]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('int array length expected: 3 but found: 1');
     });
 
     it('should extract a message with one of each type of object from a buffer',function(){
         var buffer = new Buffer([1,0x10,2,3,4,0,0,0,0x12,0x34,0x56,0x78,0x90,
-                0x80,0,0xAA,
-                0x81,1,0xAA,0xBB,
-                0x83,2,0,3,0x61,0x62,0x63,
-                0x84,4,0,0,0,0x12,0x34,0x56,0x78,0x90,
-                0x86,5,0,3,1,2,3,
-                0x88,6,0,3,0,1,0,2,0,3,
-                156]);
+            0x80,0,0xAA,
+            0x81,1,0xAA,0xBB,
+            0x83,2,0,3,0x61,0x62,0x63,
+            0x84,4,0,0,0,0x12,0x34,0x56,0x78,0x90,
+            0x86,5,0,3,1,2,3,
+            0x88,6,0,3,0,1,0,2,0,3,
+            135]);
         var message = new Message({buffer: buffer});
         message.messageType.should.equal(1);
         message.majorVersion.should.equal(1);
