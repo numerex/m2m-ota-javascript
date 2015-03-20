@@ -24,73 +24,73 @@ describe('Message',function() {
     it('should create a valid message with a single byte',function(){
         var message = new Message({timestamp: 0});
         message.pushByte(0x80,0xAA);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x80,0,0xAA,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x80,0,0xAA,0]));
     });
 
     it('should create a valid message with a single integer',function(){
         var message = new Message({timestamp: 0});
         message.pushInt(0x81,0xAABB);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x81,1,0xAA,0xBB,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x81,1,0xAA,0xBB,0]));
     });
 
     it('should create a valid message with a single empty string',function(){
         var message = new Message({timestamp: 0});
         message.pushString(0x82,'');
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x82,2,0,0,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x82,2,0,0,0]));
     });
 
     it('should create a valid message with a single simple string',function(){
         var message = new Message({timestamp: 0});
         message.pushString(0x83,'abc');
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x83,2,0,3,0x61,0x62,0x63,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x83,2,0,3,0x61,0x62,0x63,0]));
     });
 
     it('should create a valid message with a single float',function(){
         var message = new Message({timestamp: 0});
         message.pushFloat(0x90,10.5);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x90,3,65,40,0,0,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x90,3,65,40,0,0,0]));
     });
 
     it('should create a valid message with a single timestamp',function(){
         var message = new Message({timestamp: 0});
         message.pushTimestamp(0x84,0x1234567890);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x84,4,0,0,0,0x12,0x34,0x56,0x78,0x90,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x84,4,0,0,0,0x12,0x34,0x56,0x78,0x90,0]));
     });
 
     it('should create a valid message with a single empty byte array',function(){
         var message = new Message({timestamp: 0});
         message.pushByteArray(0x85,new Buffer([]));
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x85,5,0,0,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x85,5,0,0,0]));
     });
 
     it('should create a valid message with a single simple byte array',function(){
         var message = new Message({timestamp: 0});
         message.pushByteArray(0x86,new Buffer([1,2,3]));
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x86,5,0,3,1,2,3,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x86,5,0,3,1,2,3,0]));
     });
 
     it('should create a valid message with a single empty int array',function(){
         var message = new Message({timestamp: 0});
         message.pushIntArray(0x87,[]);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x87,6,0,0,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x87,6,0,0,0]));
     });
 
     it('should create a valid message with a single simple int array',function(){
         var message = new Message({timestamp: 0});
         message.pushIntArray(0x88,[1,2,3]);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x88,6,0,3,0,1,0,2,0,3,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x88,6,0,3,0,1,0,2,0,3,0]));
     });
 
     it('should create a valid message with a single empty float array',function(){
         var message = new Message({timestamp: 0});
         message.pushFloatArray(0x91,[]);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x91,7,0,0,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x91,7,0,0,0]));
     });
 
     it('should create a valid message with a single simple float array',function(){
         var message = new Message({timestamp: 0});
         message.pushFloatArray(0x92,[1.0,2.0,3.0]);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0x92,7,0,3,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x92,7,0,3,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,0]));
     });
 
     it('should create a valid message with one of each type of object',function(){
@@ -103,7 +103,7 @@ describe('Message',function() {
         message.pushByteArray(0x86,new Buffer([1,2,3]));
         message.pushIntArray(0x88,[1,2,3]);
         message.pushFloatArray(0x92,[1.0,2.0,3.0]);
-        message.toWire().should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,
+        message.toWire().should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,8,
             0x80,0,0xAA,
             0x81,1,0xAA,0xBB,
             0x83,2,0,3,0x61,0x62,0x63,
@@ -112,7 +112,7 @@ describe('Message',function() {
             0x86,5,0,3,1,2,3,
             0x88,6,0,3,0,1,0,2,0,3,
             0x92,7,0,3,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,
-            231]));
+            38]));
     });
 
     it('should thrown an error with an empty tuple',function(){
@@ -128,7 +128,7 @@ describe('Message',function() {
 
     it('should throw an error for an incomplete header',function(){
         var buffer = new Buffer([0]);
-        expect(function(){ new Message({buffer: buffer}) }).to.throw('abnormal termination - id expected');
+        expect(function(){ new Message({buffer: buffer}) }).to.throw('incomplete header found');
     });
 
     it('should throw an error for an invalid CRC',function(){
@@ -137,8 +137,13 @@ describe('Message',function() {
     });
 
     it('should throw an error for an unknown object type',function(){
-        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0xFF,255]);
+        var buffer = new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0,0xFF,144]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('unknown object type - 255');
+    });
+
+    it('should throw an error for extra bytes after the fields and before the CRC',function(){
+        var buffer = new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,122]);
+        expect(function(){ new Message({buffer: buffer}) }).to.throw('unexpected bytes in the message');
     });
 
     it('should extract a message with no tuples from a buffer',function(){
@@ -154,27 +159,27 @@ describe('Message',function() {
     });
 
     it('should throw an error if string length and content do not match',function(){
-        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,3,41]);
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2,0,3,63]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('string length expected: 3 but found: 1');
     });
 
     it('should throw an error if byte array length and content do not match',function(){
-        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,3,66]);
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,5,0,3,84]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('byte array length expected: 3 but found: 1');
     });
 
     it('should throw an error if int array length and content do not match',function(){
-        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,3,0,0,75]);
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,6,0,3,0,0,98]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('int array length expected: 3 but found: 1');
     });
 
     it('should throw an error if float array length and content do not match',function(){
-        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,3,0,0,0,0,229]);
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,7,0,3,0,0,0,0,246]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('float array length expected: 3 but found: 1');
     });
 
     it('should extract a message with one of each type of object from a buffer',function(){
-        var buffer = new Buffer([1,0x10,2,3,4,0,0,0,0x12,0x34,0x56,0x78,0x90,
+        var buffer = new Buffer([1,0x10,2,3,4,0,0,0,0x12,0x34,0x56,0x78,0x90,8,
             0x80,0,0xAA,
             0x81,1,0xAA,0xBB,
             0x83,2,0,3,0x61,0x62,0x63,
@@ -183,7 +188,7 @@ describe('Message',function() {
             0x86,5,0,3,1,2,3,
             0x88,6,0,3,0,1,0,2,0,3,
             0x92,7,0,3,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,
-            72]);
+            98]);
         var message = new Message({buffer: buffer});
         message.messageType.should.equal(1);
         message.majorVersion.should.equal(1);
