@@ -30,7 +30,7 @@ describe('Message',function() {
     it('should create a valid message with a single integer',function(){
         var message = new Message({timestamp: 0});
         message.pushInt(0x81,0xAABB);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x81,1,0xAA,0xBB,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x81,1,2,0xAA,0xBB,0]));
     });
 
     it('should create a valid message with a single empty string',function(){
@@ -72,25 +72,25 @@ describe('Message',function() {
     it('should create a valid message with a single empty int array',function(){
         var message = new Message({timestamp: 0});
         message.pushIntArray(0x87,[]);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x87,6,0,0,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x87,6,0,0,2,0]));
     });
 
     it('should create a valid message with a single simple int array',function(){
         var message = new Message({timestamp: 0});
         message.pushIntArray(0x88,[1,2,3]);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x88,6,0,3,0,1,0,2,0,3,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x88,6,0,6,2,0,1,0,2,0,3,0]));
     });
 
     it('should create a valid message with a single empty float array',function(){
         var message = new Message({timestamp: 0});
         message.pushFloatArray(0x91,[]);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x91,7,0,0,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x91,7,0,0,4,0]));
     });
 
     it('should create a valid message with a single simple float array',function(){
         var message = new Message({timestamp: 0});
         message.pushFloatArray(0x92,[1.0,2.0,3.0]);
-        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x92,7,0,3,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,0]));
+        message.toWire(true).should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,1,0x92,7,0,12,4,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,0]));
     });
 
     it('should create a valid message with one of each type of object',function(){
@@ -105,14 +105,14 @@ describe('Message',function() {
         message.pushFloatArray(0x92,[1.0,2.0,3.0]);
         message.toWire().should.eql(new Buffer([0,0x10,0,0,0,0,0,0,0,0,0,0,0,8,
             0x80,0,0xAA,
-            0x81,1,0xAA,0xBB,
+            0x81,1,2,0xAA,0xBB,
             0x83,2,0,3,0x61,0x62,0x63,
             0x90,3,65,40,0,0,
             0x84,4,0,0,0,0x12,0x34,0x56,0x78,0x90,
             0x86,5,0,3,1,2,3,
-            0x88,6,0,3,0,1,0,2,0,3,
-            0x92,7,0,3,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,
-            38]));
+            0x88,6,0,6,2,0,1,0,2,0,3,
+            0x92,7,0,12,4,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,
+            163]));
     });
 
     it('should thrown an error with an empty tuple',function(){
@@ -168,27 +168,42 @@ describe('Message',function() {
         expect(function(){ new Message({buffer: buffer}) }).to.throw('byte array length expected: 3 but found: 1');
     });
 
+    it('should throw an error if int size is not 2',function(){
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,4,0,0,0,0,229]);
+        expect(function(){ new Message({buffer: buffer}) }).to.throw('only 2-byte ints currently supported');
+    });
+
+    it('should throw an error if int array size is not 2',function(){
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,6,0,4,4,0,0,0,0,98]);
+        expect(function(){ new Message({buffer: buffer}) }).to.throw('only 2-byte ints currently supported');
+    });
+
     it('should throw an error if int array length and content do not match',function(){
-        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,6,0,3,0,0,98]);
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,6,0,6,2,0,0,195]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('int array length expected: 3 but found: 1');
     });
 
+    it('should throw an error if float array size is not 4',function(){
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,7,0,4,2,0,0,119]);
+        expect(function(){ new Message({buffer: buffer}) }).to.throw('only 4-byte floats currently supported');
+    });
+
     it('should throw an error if float array length and content do not match',function(){
-        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,7,0,3,0,0,0,0,246]);
+        var buffer = new Buffer([0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,7,0,12,4,0,0,0,0,164]);
         expect(function(){ new Message({buffer: buffer}) }).to.throw('float array length expected: 3 but found: 1');
     });
 
     it('should extract a message with one of each type of object from a buffer',function(){
         var buffer = new Buffer([1,0x10,2,3,4,0,0,0,0x12,0x34,0x56,0x78,0x90,8,
             0x80,0,0xAA,
-            0x81,1,0xAA,0xBB,
+            0x81,1,2,0xAA,0xBB,
             0x83,2,0,3,0x61,0x62,0x63,
             0x90,3,65,40,0,0,
             0x84,4,0,0,0,0x12,0x34,0x56,0x78,0x90,
             0x86,5,0,3,1,2,3,
-            0x88,6,0,3,0,1,0,2,0,3,
-            0x92,7,0,3,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,
-            98]);
+            0x88,6,0,6,2,0,1,0,2,0,3,
+            0x92,7,0,12,4,0x3F,0x80,0,0,0x40,0,0,0,0x40,0x40,0,0,
+            142]);
         var message = new Message({buffer: buffer});
         message.messageType.should.equal(1);
         message.majorVersion.should.equal(1);
