@@ -325,4 +325,34 @@ describe('Message',function() {
             {id: 0xA2,type: 14,value: [1.0,2.0,3.0]}
         ]);
     });
+    
+    it('should accept all attributes as input to the constructor',function(){
+        var message = new Message({
+            messageType: 1,
+            majorVersion: 2,
+            minorVersion: 3,
+            eventCode: 4,
+            sequenceNumber: 5,
+            timestamp: 6,
+            tuples: [{id: 7,type: 0,value: 8}]
+        });
+        message.messageType.should.equal(1);
+        message.majorVersion.should.equal(2);
+        message.minorVersion.should.equal(3);
+        message.eventCode.should.equal(4);
+        message.sequenceNumber.should.equal(5);
+        message.timestamp.should.equal(6);
+        message.tuples.should.eql([{id: 7,type: 0,value: 8}]);
+    });
+
+    it('should accept JSON as input',function(){
+        var message = new Message({json: '{"messageType":1,"majorVersion":2,"minorVersion":3,"eventCode":4,"sequenceNumber":5,"timestamp":6,"tuples":[{"id":7,"type":0,"value":8}]}'});
+        message.messageType.should.equal(1);
+        message.majorVersion.should.equal(2);
+        message.minorVersion.should.equal(3);
+        message.eventCode.should.equal(4);
+        message.sequenceNumber.should.equal(5);
+        message.timestamp.should.equal(6);
+        message.tuples.should.eql([{id: 7,type: 0,value: 8}]);
+    });
 });
