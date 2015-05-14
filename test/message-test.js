@@ -21,6 +21,17 @@ describe('Message',function() {
         header.should.eql(new Buffer([8,0x10,10,0,1,0,0,0,0x12,0x34,0x56,0x78,0x90]));
     });
 
+    it('should find an existing tuple by id',function(){
+        var message = new Message();
+        message.pushByte(0x80,0xAA);
+        message.find(0x80).should.eql(0xAA);
+    });
+
+    it('should return a default value if it cannot find a tuple by id',function(){
+        var message = new Message();
+        message.find(0x80,0xAA).should.eql(0xAA);
+    });
+
     it('should create a valid message with a single signed byte',function(){
         var message = new Message({timestamp: 0});
         message.pushByte(0x80,0xAA);
