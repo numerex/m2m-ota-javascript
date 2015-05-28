@@ -367,8 +367,14 @@ describe('Message',function() {
         message.tuples.should.eql([{id: 7,type: 0,value: 8}]);
     });
 
-    it('should accept JSON with a Buffer for bytes as input',function(){
+    it('should accept JSON with a Buffer for bytes as input using node v0.12 format for buffers',function(){
         var json = '{"messageType":1,"majorVersion":1,"minorVersion":0,"eventCode":0,"sequenceNumber":1,"timestamp":0,"tuples":[{"type":11,"id":10,"value":{"type":"Buffer","data":[1,2,3,4,5,6,7,8,9]}}]}';
+        var message = new Message({json: json});
+        message.toWire(true).should.eql(new Buffer([1,0x10,0,0,1,0,0,0,0,0,0,0,0,1,10,11,0,9,1,2,3,4,5,6,7,8,9,0]));
+    });
+
+    it('should accept JSON with a Buffer for bytes as input using node v0.10 format for buffers',function(){
+        var json = '{"messageType":1,"majorVersion":1,"minorVersion":0,"eventCode":0,"sequenceNumber":1,"timestamp":0,"tuples":[{"type":11,"id":10,"value":[1,2,3,4,5,6,7,8,9]}]}';
         var message = new Message({json: json});
         message.toWire(true).should.eql(new Buffer([1,0x10,0,0,1,0,0,0,0,0,0,0,0,1,10,11,0,9,1,2,3,4,5,6,7,8,9,0]));
     })
