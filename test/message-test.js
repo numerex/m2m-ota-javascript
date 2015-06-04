@@ -1,7 +1,21 @@
 var expect = require('./test').expect;
+var Common = require('../lib/common');
 var Message = require('../lib/message');
 
 describe('Message',function() {
+    
+    it('should detect message types',function(){
+        checkType(new Message(),false,false);
+        checkType(new Message({messageType: Common.MOBILE_ORIGINATED_ACK}),true,false);
+        checkType(new Message({messageType: Common.MOBILE_TERMINATED_ACK}),true,false);
+        checkType(new Message({messageType: Common.MOBILE_ORIGINATED_EVENT}),false,true);
+        checkType(new Message({messageType: Common.MOBILE_TERMINATED_EVENT}),false,true);
+    });
+    
+    function checkType(message,ack,event){
+        message.isAck().should.eql(ack);
+        message.isEvent().should.eql(event);
+    }
 
     it('should create a valid default header',function(){
         var message = new Message();
